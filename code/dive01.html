@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>数当てゲーム</title>
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+        justify-content: center;
+      }
+
+      header{padding: 5%;
+      }
+
+      .design{
+        display:5em;
+        border:5px dotted aqua;
+      }
+      .lastResult {
+        color: blue;
+        padding: 3px;
+      }
+
+      h1{
+        box-sizing: border-box;
+        width: 500px;
+        height:50px;
+        opacity: 1.0;
+      }
+      p{
+        display: inline-block;
+      }
+
+    </style>
+  </head>
+  <body>
+    <header>
+    </header>
+    <div class="design">
+<h1>＼ドキドキ！／<span>数当てゲーム</span></h1>
+
+<p>
+    1から10回まで。100の数字を支度しました。当ててみてください。
+    予想した数字が高すぎるか低すぎるかをついでにお知らせします。
+</p>
+
+<main class="form">
+  <label for="guessField">数字を入力してください。：</label>
+  <input type="text" id="guessField" class="guessField">
+  <input type="submit" value="予想を入力" class="guessSubmit">
+</main>
+
+  <div class="resultParas">
+    <!--一行目 -->  
+    <p class="guesses"></p>
+    <!-- 二行目-->
+    <p class="lastResult"></p>
+    <!--三行目 -->
+    <p class="lowOrHi"></p>
+    </div>
+</div>
+
+<script>
+  'use strict'
+// Your JavaScript goes here
+//ここにJavaScriptを入力
+    
+    //letにrandomNumberを名付ける。 Math<数字>.ランダム関数* 100 + 1の処理を施す
+    let randomNumber = Math.floor(Math.random() * 100)+1;
+    
+    //定数const にguessesを名付け、中に「document<文章>のクエリを選択し<'class要素'>を入れる。
+    const guesses = document.querySelector('.guesses');
+
+    //定数const にlastを名付け、中に「document<文章>のクエリを選択し<'最後の結果'>を入れる。
+    const lastResult = document.querySelector('.lastResult');
+
+    //定数const にlowOrHiを名付け、中に「document<文章>のクエリを選択し<'.lowOrhi'>を入れる。
+    const lowOrHi = document.querySelector('.lowOrHi');
+    
+    //定数const にguesSubmitを名付け、中に「document<文章>のクエリを選択し<'.guessSubmit'>を入れる。
+    const guessSubmit = document.querySelector('.guessSubmit');
+
+    //定数const にguessFieldを名付け、中に「document<文章>のクエリを選択し<'.guessField'>を入れる。
+    const guessField = document.querySelector('.guessField');
+    
+    //letにguessCountを名付け1を入れる
+    let guessCount = 1;
+    //letにリセットボタンを名付ける
+    let resetButton;
+
+  console.log('最初にここまで');
+    /****
+    数当てゲームのスクリプトスタート
+    ****/
+
+  //(1)関数 checkGuessの要素を処理する（処理式1）
+  function checkGuess(){
+
+  //(2)letにuserGuessを名付け数値guessFieldを入れる(ドキュメントからの変数定義1*)
+  let userGuess = Number(guessField.value);
+    //↑変数を宣言し、入力された値をセット。数値であることの確認
+
+  //(3)『処理式if』guessCountは1と厳密に等しい場合（===）にどうするか？（処理式1-1*）
+  if (guessCount === 1){
+  
+  //(4)guessにまつわる文章の内容の「前回の予想」に名前をつける：（処理式1-1*）
+  guesses.textContent = '前回の予想： ';
+  }
+
+  /*↑初めての条件分岐のコードブロック(1)
+  （trueの場合の処理）{true以外の処理} (2-3)
+  1の場合の処理を想定し、そうでなければ。。『前回の予想を出力』(4)
+  */
+
+  //(6)変数guesに文章<text>の内容を<+=>加算代入足していく。+''（処理式2）
+  guesses.textContent += userGuess +' ';
+  /*↑段落最後のスペースをつけ、現在のuserGuessの値を追加。()
+  予想が表示される時に「' '」スペースで区切られる。
+  */
+
+  //(8)もしuserGuessのrandomNumberと一致するものであれば（処理式2）
+  if(userGuess === randomNumber){
+    /*↑プレイヤーの予想が、
+    JavaScriptコードの先頭で設定したランダム数字を格納する。
+    これが一致か調べる。
+    */
+
+    //(9)変数<lastResult>の"guessField"の後ろに = "おめでとう" <!-- 1行目-->
+    lastResult.textContent = 'おめでとう！正解です！';
+  
+    //(10)同じく最後の結果にスタイルで色を塗る = "緑"<!-- 1行目 -->
+    lastResult.style.backgroundColor = 'green';
+    
+    //(11)3行目の文章の内容
+    lowOrHi.textContent = '';
+    
+    //(15)セットゲームオーバーのオブジェクトを生成
+    setGameOver();
+      /*↑9〜15一致であれば祝福のメッセージを出力(9-10)。
+      その場に相応しくない文を削除(11)
+      そしてgameover関数を実行(15)
+      */
+
+    //(13)あるいは<else>のif処理<else>(guessを操作した数が10と統合した時）（処理式2*-1）
+  } else if (guessCount === 10){
+    
+    //(14)<二行目>のResultに文章 = "ゲームオーバー"<!--二行目-->
+    lastResult.textContent = '!!!ゲームオーバー!!!';
+
+    //(15)セットゲームオーバーのオブジェクトを生成
+    setGameOver();
+    /*↑else if(){}という部分で一つの条件に続けて書く(13)
+    guessCountがtrue(10)を迎えた時(13)
+    (14)ゲームオーバーの出力を出す。
+    ※(15)それ以外であれば、出力はそのまま無視される：
+    あるいは実行されない。
+    */
+
+    //(16)あるいは<else>
+  } else {
+
+    //(17)<二行目>lastResultの文章を追加
+    lastResult.textContent = '間違いです！';
+    
+    //(18)<二行目>色をぬる
+    lastResult.style.backgroundColor = 'red';
+
+    //(19)if処理もし。。userGuess(入力した数値)よりも小さい場合
+    if(userGuess < randomNumber){
+      
+    //(20)<三行目>に出力
+    lowOrHi.textContent="今の予想は小さいです。もっと大きい数字です！";
+    
+    //(21)あるいは、、userGuess（入力した数値）よりも大きい場合
+    } else if(userGuess > randomNumber){
+      lowOrHi.textContent = '今の予想は大きいです。もっと小さい数字ですよ！';
+    }
+  }
+    /*↑全ての意図しない処理の行方として（17-20）
+      前の二つの条件がどちらとも真とならなかった場合にのみ実行（プログラマの行方）
+      プレイヤーは間違えてはいるものの予想可能な上限に達していない場合。
+      入力された数字が大きいか小さいかを伝えるため、さらなる確認を行う。
+    */
+
+  //(26–28)
+    guessCount++;
+    guessField.value = '';
+    guessField.focus();
+}
+      /*↑次の予想の入力を受け取るための準備(26-28)
+    guessCount変数に1を加算し、プレイヤーの予想回数を数える。
+    そのため、読み込みが1で次に++という感じ。
+    */
+
+//イベントリスナー（ボタンを入力した時の処理）
+guessSubmit.addEventListener('click' , checkGuess);
+  /*↑
+  guessSubmit（htmlクラス名）.イベントリスナー
+  click処理 →→引数→→「関数：checkGuess」処理
+  */
+
+  
+
+/*******
+  ゲーム機能の充実へ
+*******/
+
+  //script内で作成したsetGameOverの中身
+  function setGameOver(){
+    //(1)<!--入力ソース-->が<=>無効
+    guessField.disabled = true;
+
+    //(2)<!-- 入力ボタン -->が<=>無効
+    guessSubmit.disabled = true;
+    /*↑(1-2)入力フォームのテキストフィールド、
+    ボタンのdisble(入力)プロパティをtrueに設定し、
+    入力できないようにする。
+    */
+
+    //(3)letに名付けたresetButton<96>をボタンとして作成
+    resetButton = document.createElement('button');
+    
+    //(4)letに名付けたresetButton<96>に新しいゲームを始めるとして表示
+    resetButton.textContent = '新しいゲームを始める';
+    
+    //(5)<document>文章を<body>表示内に追加<append>、子要素に<child> (resetButton<96>)
+    document.body.appendChild(resetButton);
+    /*↑(3-5)新しい<button>要素を生成(3)、そのラベルに"新しいゲームを始める"(4)を追加(5)
+    */
+
+    //(6)resetButton<96>を取得（'クリック' リセットゲームを作成）
+    resetButton.addEventListener('click' , resetGame);
+  }
+   /*↑(6)生成されたリセットボタンがクリックされた時、
+    (resetGameの関数）を実行されるように設定
+    */
+ 
+console.log('ここまで読み込んだ');
+
+/******
+GameOverの記述：起動のリセット
+******/
+
+  //(1)リセットゲームの関数
+  function resetGame(){
+    
+    //(1)<93>のguessCountに1を入れる
+    guessCount = 1;
+    /*↑guessCountに1を代入して元に戻す。
+    */
+  
+    //(2)resetParasを生成。<62>のresult<!-1行目->のpのスタイルを抽出。
+    const resetParas = document.querySelectorAll('.resultParas p');
+    
+    //(3)for処理(letが<=>iで0。 iが<!-1行目->より長いのであれば順にiに足す<length>)
+    for(let i = 0; i < resetParas.length ; i++){
+  
+    //(4)そうでなければresetParasとメンバ演算子で並べ、テキストの内容に空白を入れる。
+    resetParas[i].textContent = ' ';
+  }
+  /*↑(2–4)情報段落の全てを消去
+    */
+  
+
+  //(5)リセットボタン<228>を親ノードで、子に追加(resetButton)
+  resetButton.parentNode.removeChild(resetButton);
+  /*↑リセットボタンをページから削除する
+  */
+
+  //(6)guessField<57>を無効にするを無効
+  guessField.disabled = false;
+  
+  //(7)guessSubmit<59>を無効にするのを無効
+  guessSubmit.disabled = false;
+
+  //(8)guessField<57>の入力に余白
+  guessField.value = ' ';
+
+  //(9)guessField<58>の入力に「focus()」キーボードを受け取る要素
+  guessField.focus();
+  /*↑(6–9)入力フォームを空にしてフォーカスを設定
+    */
+
+  //(10)最終結果の変数のstyleスタイルの色 white;
+  lastResult.style.backgroundColor = 'white';
+    /*↑最終結果を表示しているlastResult段落の背景色を消去
+    */
+  
+  //(11)<75>ランダム関数のMath<数字>.ランダム関数* 100 + 1の処理を施す
+  randomNumber = Math.floor(Math.random() * 100)+ 1;
+  }
+  /*↑(10–11)同じ数字以外の数字でゲームができるように、新しいランダムな数字を再度生成する。
+    */
+
+console.log('ここまで読み込んでいる');
+
+</script>
+<!--
+  <script>
+    //コンソールでの予備知識（代入演算子の練習）
+    let name = 'ビンゴさん（let name）';
+    name;
+    let hello = 'が、こんにちは！と言っています。（let hello）';
+    hello;
+    let greeting = name + hello;
+    greeting;
+    console.log(name);
+    console.log(hello);
+    console.log(greeting,'（greeting）let+name');
+    var tasu = 5+2;
+    console.log("5+2=",tasu);
+</script>
+-->  
+</body>
+</html>

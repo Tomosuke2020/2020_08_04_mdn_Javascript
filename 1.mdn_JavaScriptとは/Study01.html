@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <title>Study</title>
+<style>
+    p {
+font-family: 'helvetica neue', helvetica, sans-serif;
+letter-spacing: 1px;
+text-transform: uppercase;
+text-align: center;
+border: 2px solid rgba(0,0,200,0.6);
+background: rgba(0,0,200,0.3);
+color: rgba(0,0,200,0.6);
+box-shadow: 1px 1px 2px rgba(0,0,200,0.4);
+border-radius: 10px;
+padding: 3px 10px;
+display: inline-block;
+cursor:pointer;
+}
+</style>
+
+</head>
+    <body>
+        <p>Player 1: Chris</p>
+    <script>
+    //1.constのParaにドキュメントのクエリから選ぶ
+    const para = document.querySelector('p');
+
+    //2.paraの空間の中でadd<追加で>、Event<出来事>のListenr<聞き手>{関数}があった。（'クリック'と名前の更新）
+    para.addEventListener('click' , updateName);
+
+    //3.関数の処理スタート 名前の更新（）
+    function updateName(){
+        //3.5letのnameにpromp('画面の表示');
+        let name = prompt('名前を入力してください');
+        
+        //3.6paraの箱にテキストの中身 'player'と名前
+        para.textContent = 'Player 1:' + name;
+}
+    </script>
+    </body>
+</html>

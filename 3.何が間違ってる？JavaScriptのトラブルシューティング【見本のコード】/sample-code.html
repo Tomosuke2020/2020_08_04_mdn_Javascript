@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>数当てゲーム（翻訳版）</title>
+
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+      .lastResult {
+        color: white;
+        padding: 3px;
+      }
+    </style>
+  </head>
+
+  <body>
+      <h1>数当てゲーム</h1>
+
+      <p>1から10回まで。100の数字を支度しました。当ててみてください。
+        予想した数字が高すぎるか低すぎるかをついでにお知らせします。（guess訳：推測）</p>
+
+<div class="form">
+  <label for="guessField">数字を入力してください。: </label><input type="text" id="guessField" class="guessField">
+  <input type="submit" value="Submit guess" class="guessSubmit">
+</div>
+
+<div class="resultParas">
+  <p class="guesses"></p>
+  <p class="lastResult"></p>
+  <p class="lowOrHi"></p>
+</div>
+
+</body>
+<script>
+  let randomNumber = Math.floor(Math.random()*100) + 1;
+  console.log('1行目Math' , randomNumber);
+  const guesses = document.querySelector('.guesses');
+  const lastResult = document.querySelector('.lastResult');
+  const lowOrHi = document.querySelector('.lowOrHi');
+  const guessSubmit = document.querySelector('.guessSubmit');
+  const guessField = document.querySelector('.guessField');
+
+  let guessCount = 1;
+  let resetButton;
+
+  function checkGuess() {
+
+    let userGuess = Number(guessField.value);
+    if(guessCount === 1) {
+      guesses.textContent = '前回の予測: ';
+    }
+    guesses.textContent += userGuess + ' ';
+
+    if(userGuess === randomNumber) {
+      lastResult.textContent = 'Congratulations! You got it right!';
+      lastResult.style.backgroundColor = 'green';
+      lowOrHi.textContent = '';
+      setGameOver();
+    } else if(guessCount === 10) {
+      lastResult.textContent = '!!!ゲームオーバー!!!';
+      setGameOver();
+    } else {
+      lastResult.textContent = '違います!';
+      lastResult.style.backgroundColor = 'red';
+      if(userGuess < randomNumber) {
+        lowOrHi.textContent = '今の予想した数字は小さすぎます！';
+      } else if(userGuess > randomNumber) {
+        lowOrHi.textContent = '今の予想した数字は大きすぎます！';
+      }
+    }
+
+    guessCount++;
+    guessField.value = '';
+    guessField.focus();
+  }
+  guessSubmit.addEventListener('click', checkGuess);
+
+  function setGameOver() {
+	  guessField.disabled = true;
+	  guessSubmit.disabled = true;
+	  resetButton = document.createElement('button');
+	  resetButton.textContent = 'Start new game';
+	  document.body.appendChild(resetButton);
+	  resetButton.addEventListener('click', resetGame);
+  }
+
+  function resetGame() {
+	  guessCount = 1;
+
+	  const resetParas = document.querySelectorAll('.resultParas p');
+	  for(let i = 0; i < resetParas.length; i++) {
+		  resetParas[i].textContent = '';
+	  }
+	  resetButton.parentNode.removeChild(resetButton);
+
+	  guessField.disabled = false;
+	  guessSubmit.disabled = false;
+	  guessField.value = '';
+	  guessField.focus();
+
+	  lastResult.style.backgroundColor = 'white';
+
+	  randomNumber = Math.floor(Math.random()*100) + 1;
+    console.log('2行目Math' , randomNumber);
+  }
+</script>
+</html>
